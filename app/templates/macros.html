@@ -1,41 +1,89 @@
 {% macro display(pitches) %}
+<style>
+  .card-footer{
+    position: relative; 
+    height: 7vh;   
+  }
+  .like-div{
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .dislike-div{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .card-body{
+    position: relative;
+    height: 25vh;
+  }
+  .comment-count{
+    position: absolute;
+    left: 125px;
+    bottom: 10px;
+  }
+  .comment-button{
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+  }
+</style>
 <div class="container-fluid">
-    <div class="row">
-        {% if pitches %}
-        {% for category in pitches %}
-        <div class="col-md-4">
-            <div class="thumbnail" id="carded">
-                <h5 class="card-header">{{category.title}}</h5>
-                <div class="card-body">
-                    <p>{{category.post}}</p>
-                    <p class="text-center"> Category: {{category.category}}</p>
-                    <footer class="blockquote-footer text-center"> Posted by: {{category.user.username}}</footer>
-                    <div><span class="foot">{{category.comment.count()}} Comments</span>
-                        
-
-                    <a href="{{url_for('main.comment',pitch_id = category.id)}}" class="btn btn-info btn-warning">
-                        Comment</a>
-                </div>
-                <div class="card-footer"><span class="foot"> <a href="{{url_for('main.like',id = category.id)}}"><i
-                    class="fa fa-thumbs-up" style="font-size:18px;color: maroon"></i></a>
-            {{category.upvote.count()}}</span>
-
-
-        <span class="foot"> <a href="{{url_for('main.dislike',id = category.id)}}"> <i
-                    class="fa fa-thumbs-down" style="font-size:18px;color:aqua;"></i>
-                {{category.downvote.count()}}</a></span></div></div>
-            </div>
+  <div class="row">
+    {% if pitches %} {% for category in pitches %}
+    <div class="col-md-4">
+      <div class="thumbnail" id="carded">
+        <h5 class="card-header">{{category.title}}</h5>
+        <div class="card-body">
+          <p>{{category.post}}</p>
+          <p class="text-center">Category: {{category.category}}</p>
+          <footer class="blockquote-footer text-center">
+            Posted by: {{category.user.username}}
+          </footer>
+          <div class="comment-count">            
+            <span class="foot">{{category.comment.count()}} Comments</span>
+          </div>
+          <div class="comment-button">
+            <a
+            href="{{url_for('main.comment',pitch_id = category.id)}}"
+            class="btn btn-info btn-warning"
+          >
+            Comment</a
+          >
+          </div>
         </div>
-
-        {% endfor %}
-        {% else %}
-        <div class="card w-90 mb-3">
-            <div class="card-body">
-
-                <p class="card-title">Category Has 0 posts</p>
-            </div>
+        <div class="card-footer">
+          <span class="like-div">
+            <a href="{{url_for('main.like',id = category.id)}}"
+              ><i
+                class="fa fa-thumbs-up"
+                style="font-size: 15px; color: maroon"
+              ></i
+            ></a>
+            {{category.upvote.count()}}</span
+          >
+          <span class="dislike-div">
+            <a href="{{url_for('main.dislike',id = category.id)}}">
+              <i
+                class="fa fa-thumbs-down"
+                style="font-size: 15px; color: aqua"
+              ></i>
+              {{category.downvote.count()}}</a
+            ></span
+          >
         </div>
-        {% endif %}
+      </div>
     </div>
+    {% endfor %} {% else %}
+    <div class="card w-90 mb-3">
+      <div class="card-body">
+        <p class="card-title">Category Has 0 posts</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
 </div>
 {% endmacro %}
